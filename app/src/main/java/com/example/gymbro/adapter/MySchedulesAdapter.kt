@@ -9,7 +9,7 @@ import com.example.gymbro.R
 import com.example.gymbro.databinding.MySchedulesListItemBinding
 import com.example.gymbro.model.Schedule
 
-class MySchedulesAdapter: ListAdapter<Schedule, MySchedulesAdapter.MyScheduleViewHolder>(DiffCallBack) {
+class MySchedulesAdapter(val listener: (Schedule) -> Unit): ListAdapter<Schedule, MySchedulesAdapter.MyScheduleViewHolder>(DiffCallBack) {
 
     class MyScheduleViewHolder(val binding: MySchedulesListItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(schedule: Schedule) {
@@ -24,7 +24,11 @@ class MySchedulesAdapter: ListAdapter<Schedule, MySchedulesAdapter.MyScheduleVie
     }
 
     override fun onBindViewHolder(holder: MyScheduleViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val currentItem = getItem(position)
+        holder.bind(currentItem)
+        holder.binding.parentConstraintLayout.setOnClickListener {
+            listener(currentItem)
+        }
     }
 
     companion object DiffCallBack: DiffUtil.ItemCallback<Schedule>() {

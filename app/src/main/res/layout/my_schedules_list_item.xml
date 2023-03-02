@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -29,20 +31,31 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Pull, Push, Legs" />
 
-        <TextView
-            android:id="@+id/tv_schedule_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="16dp"
-            android:gravity="center_vertical"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/schedule_image"
-            app:layout_constraintTop_toBottomOf="@+id/tv_schedule_name"
-            tools:text="Trains full body twice a week with 4 working days." />
+    <TextView
+        android:id="@+id/tv_schedule_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/next_arrow"
+        app:layout_constraintStart_toEndOf="@id/schedule_image"
+        app:layout_constraintTop_toBottomOf="@+id/tv_schedule_name"
+        tools:text="Trains full body twice a week with 4 working days." />
+
+    <ImageView
+        android:id="@+id/next_arrow"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/baseline_arrow_forward_ios_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="0dp"
@@ -52,6 +65,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_schedule_description"
         app:layout_constraintStart_toStartOf="@id/tv_schedule_description"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

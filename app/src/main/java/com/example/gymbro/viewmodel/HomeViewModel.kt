@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import com.example.gymbro.model.Schedule
 
 class HomeViewModel: ViewModel() {
+
+    var currentSchedule: Schedule? = null
     fun getSchedule(): List<Schedule> {
         return listOf(
             Schedule("Pull, Push, Legs", "Trains full body twice a week with 6 working days."),
