@@ -14,7 +14,7 @@ class MySchedulesAdapter(val listener: (Schedule) -> Unit): ListAdapter<Schedule
     class MyScheduleViewHolder(val binding: MySchedulesListItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(schedule: Schedule) {
             binding.tvScheduleName.text = schedule.name
-            binding.tvScheduleDescription.text = schedule.instructions
+            binding.tvScheduleDescription.text = schedule.description
             binding.scheduleImage.setImageResource(R.drawable.ic_launcher_background)
         }
     }
