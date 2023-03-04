@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -74,9 +75,15 @@ class HomeFragment : Fragment() {
             .setPositiveButton("Add") { dialog, _ ->
                 val scheduleName = tvScheduleName.text.toString()
                 val scheduleDescription = tvScheduleDescription.text.toString()
-                homeViewModel.addSchedule(Schedule(scheduleName, scheduleDescription))
 
-                dialog.dismiss()
+                if (scheduleName.isEmpty()) {
+                    Toast.makeText(context, "Failed: Add Name", Toast.LENGTH_LONG).show()
+                } else if (scheduleDescription.isEmpty()) {
+                    Toast.makeText(context, "Failed: Add Description", Toast.LENGTH_LONG).show()
+                } else {
+                    homeViewModel.addSchedule(Schedule(scheduleName, scheduleDescription))
+                    dialog.dismiss()
+                }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
