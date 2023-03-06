@@ -8,19 +8,18 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gymbro.R
 import com.example.gymbro.activity.HomeActivity
 import com.example.gymbro.adapter.MySchedulesAdapter
-import com.example.gymbro.databinding.AddScheduleAlertDialogBinding
 import com.example.gymbro.databinding.FragmentHomeBinding
 import com.example.gymbro.model.Schedule
 import com.example.gymbro.viewmodel.HomeViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class HomeFragment : Fragment() {
 
@@ -28,12 +27,16 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var materialScheduleAlertDialog: MaterialAlertDialogBuilder
     private lateinit var customAlertDialogView: View
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mDatabaseRef: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater)
+        mAuth = FirebaseAuth.getInstance()
+        mDatabaseRef = Firebase.firestore
         homeViewModel = (activity as HomeActivity).homeViewModel
         materialScheduleAlertDialog = MaterialAlertDialogBuilder(binding.root.context)
         return binding.root
@@ -41,29 +44,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val mySchedulesAdapter = MySchedulesAdapter {
-            homeViewModel.currentSchedule = it
-            findNavController().navigate(R.id.action_homeFragment_to_scheduleFragment)
-        }
-        binding.rvSchedule.adapter = mySchedulesAdapter
-        mySchedulesAdapter.submitList(homeViewModel.getScheduleList())
-
-        if (mySchedulesAdapter.itemCount == 0) {
-            binding.emptyRvScheduleAddButton.visibility = View.VISIBLE
-            binding.emptyRvScheduleTextView.visibility = View.VISIBLE
-        }
-        if (binding.rvFriends.isEmpty()) {
-            binding.emptyRvFriendsTextView.visibility = View.VISIBLE
-        }
-        binding.btnAddSchedule.setOnClickListener {
-            customAlertDialogView = LayoutInflater.from(context).inflate(R.layout.add_schedule_alert_dialog, binding.root, false)
-            launchCustomAlertDialog()
-        }
-        binding.emptyRvScheduleAddButton.setOnClickListener {
-            customAlertDialogView = LayoutInflater.from(context).inflate(R.layout.add_schedule_alert_dialog, binding.root, false)
-            launchCustomAlertDialog()
-        }
+        setupUi()
     }
 
     private fun launchCustomAlertDialog() {
@@ -89,5 +70,33 @@ class HomeFragment : Fragment() {
                 dialog.dismiss()
             }
             .show()
+    }
+
+    private fun setupUi() {
+        val mySchedulesAdapter = MySchedulesAdapter {
+            homeViewModel.currentSchedule = it
+            findNavController().navigate(R.id.action_homeFragment_to_scheduleFragment)
+        }
+        binding.rvSchedule.adapter = mySchedulesAdapter
+        mySchedulesAdapter.submitList(homeViewModel.getScheduleList())
+
+        val firstName = homeViewModel.getFirstName()
+        binding.tvGreetingName.text = getString(R.string.greeting_name, firstName)
+
+        if (mySchedulesAdapter.itemCount == 0) {
+            binding.emptyRvScheduleAddButton.visibility = View.VISIBLE
+            binding.emptyRvScheduleTextView.visibility = View.VISIBLE
+        }
+        if (binding.rvFriends.isEmpty()) {
+            binding.emptyRvFriendsTextView.visibility = View.VISIBLE
+        }
+        binding.btnAddSchedule.setOnClickListener {
+            customAlertDialogView = LayoutInflater.from(context).inflate(R.layout.add_schedule_alert_dialog, binding.root, false)
+            launchCustomAlertDialog()
+        }
+        binding.emptyRvScheduleAddButton.setOnClickListener {
+            customAlertDialogView = LayoutInflater.from(context).inflate(R.layout.add_schedule_alert_dialog, binding.root, false)
+            launchCustomAlertDialog()
+        }
     }
 }

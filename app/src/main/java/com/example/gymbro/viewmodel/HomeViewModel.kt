@@ -1,11 +1,13 @@
 package com.example.gymbro.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import com.example.gymbro.model.Schedule
+import com.example.gymbro.repository.UserRepository
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel(
+    private val userRepository: UserRepository
+): ViewModel() {
 
     var currentSchedule: Schedule? = null
     private var scheduleList: MutableList<Schedule> = arrayListOf()
@@ -17,4 +19,10 @@ class HomeViewModel: ViewModel() {
     fun getScheduleList(): List<Schedule> {
         return scheduleList
     }
+
+    fun signOut() {
+        userRepository.signOut()
+    }
+
+    fun getFirstName(): String = userRepository.getFirstName()
 }
