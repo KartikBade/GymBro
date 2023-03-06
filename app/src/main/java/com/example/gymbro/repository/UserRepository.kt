@@ -3,14 +3,20 @@ package com.example.gymbro.repository
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.example.gymbro.activity.HomeActivity
+import com.example.gymbro.adapter.MySchedulesAdapter
+import com.example.gymbro.databinding.FragmentHomeBinding
 import com.example.gymbro.fragment.REQUEST_CODE_SIGN_IN
 import com.example.gymbro.model.Schedule
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,7 +68,61 @@ class UserRepository(
     }
 
     fun addSchedule(schedule: Schedule) {
-        
+        val email = userAuthRef.currentUser?.email.toString()
+        val currentSchedule: MutableMap<String, Any> = hashMapOf(
+            "name" to schedule.name,
+            "description" to schedule.description
+        )
+        userDatabaseRef.collection("users")
+            .document(email)
+            .collection("schedules")
+            .add(currentSchedule)
+    }
+
+//    suspend fun getScheduleList(): ArrayList<Schedule> {
+//        val scheduleList: ArrayList<Schedule> = ArrayList()
+//        userDatabaseRef.collection("users")
+//            .document(userAuthRef.currentUser?.email.toString())
+//            .collection("schedules")
+//            .get()
+//            .addOnSuccessListener { result ->
+//                for (document in result) {
+//                    val name = document.data["name"].toString()
+//                    val desc = document.data["description"].toString()
+//                    Log.e("UserRepo", "$name -> $desc")
+//                    scheduleList.add(Schedule(name = name, description = desc))
+//                    Log.e("UserRepo", scheduleList.size.toString())
+//                }
+//            }.await()
+//        Log.e("UserRepo", scheduleList.size.toString())
+//        return scheduleList
+//    }
+
+    fun bindAdapterToDatabase(adapter: MySchedulesAdapter, binding: FragmentHomeBinding) {
+        val scheduleCollectionRef = userDatabaseRef.collection("users")
+            .document(userAuthRef.currentUser?.email.toString())
+            .collection("schedules")
+
+        scheduleCollectionRef.addSnapshotListener { value, error ->
+            error?.let {
+                Toast.makeText(context, error.message.toString(), Toast.LENGTH_LONG).show()
+                return@addSnapshotListener
+            }
+            value?.let {
+                val scheduleList = arrayListOf<Schedule>()
+                for (document in it) {
+                    scheduleList.add(Schedule(document.data["name"].toString(), document.data["description"].toString()))
+                }
+                adapter.submitList(scheduleList)
+                if (scheduleList.size <= 0) {
+                    binding.emptyRvScheduleAddButton.visibility = View.VISIBLE
+                    binding.emptyRvScheduleTextView.visibility = View.VISIBLE
+                } else {
+                    binding.emptyRvScheduleAddButton.visibility = View.INVISIBLE
+                    binding.emptyRvScheduleTextView.visibility = View.INVISIBLE
+                }
+            }
+        }
     }
 
     private fun saveUserToDatabase(username: String, email: String) {

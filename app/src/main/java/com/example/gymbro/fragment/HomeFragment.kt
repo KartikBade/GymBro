@@ -1,6 +1,7 @@
 package com.example.gymbro.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,15 +79,11 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_scheduleFragment)
         }
         binding.rvSchedule.adapter = mySchedulesAdapter
-        mySchedulesAdapter.submitList(homeViewModel.getScheduleList())
+        homeViewModel.bindAdapterToDatabase(mySchedulesAdapter, binding)
 
         val firstName = homeViewModel.getFirstName()
         binding.tvGreetingName.text = getString(R.string.greeting_name, firstName)
 
-        if (mySchedulesAdapter.itemCount == 0) {
-            binding.emptyRvScheduleAddButton.visibility = View.VISIBLE
-            binding.emptyRvScheduleTextView.visibility = View.VISIBLE
-        }
         if (binding.rvFriends.isEmpty()) {
             binding.emptyRvFriendsTextView.visibility = View.VISIBLE
         }

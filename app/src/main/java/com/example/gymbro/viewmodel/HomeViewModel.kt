@@ -1,28 +1,43 @@
 package com.example.gymbro.viewmodel
 
+import android.content.Context
 import android.content.Intent
+import android.os.AsyncTask
+import android.util.Log
+import android.view.View
+import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.gymbro.activity.HomeActivity
+import com.example.gymbro.adapter.MySchedulesAdapter
+import com.example.gymbro.databinding.FragmentHomeBinding
 import com.example.gymbro.model.Schedule
 import com.example.gymbro.repository.UserRepository
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class HomeViewModel(
     private val userRepository: UserRepository
 ): ViewModel() {
 
     var currentSchedule: Schedule? = null
-    private var scheduleList: MutableList<Schedule> = arrayListOf()
-
-    fun addSchedule(schedule: Schedule) {
-        scheduleList.add(schedule)
-    }
-
-    fun getScheduleList(): List<Schedule> {
-        return scheduleList
-    }
 
     fun signOut() {
         userRepository.signOut()
     }
 
     fun getFirstName(): String = userRepository.getFirstName()
+
+    fun addSchedule(schedule: Schedule) {
+        userRepository.addSchedule(schedule)
+    }
+
+    fun bindAdapterToDatabase(adapter: MySchedulesAdapter, binding: FragmentHomeBinding) {
+        userRepository.bindAdapterToDatabase(adapter, binding)
+    }
 }

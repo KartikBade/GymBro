@@ -9,4 +9,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="light_grey">#D3D3D3</color>
     <color name="grey">#A9A9A9</color>
+
+    <color name="beige">#DAF7A6</color>
+    <color name="yellow">#FFC300</color>
+    <color name="orange">#FF5733</color>
+    <color name="maroon">#C70039</color>
+    <color name="purple">#900C3F</color>
+    <color name="dark_purple">#581845</color>
 </resources>
