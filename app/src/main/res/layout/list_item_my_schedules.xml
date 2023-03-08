@@ -5,17 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_constraint_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/schedule_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_launcher_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="wrap_content"
+    android:background="@color/black">
 
         <TextView
             android:id="@+id/tv_schedule_name"
@@ -25,11 +16,11 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:gravity="center_vertical"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/next_arrow"
-            app:layout_constraintStart_toEndOf="@+id/schedule_image"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Pull, Push, Legs" />
 
@@ -37,33 +28,34 @@
         android:id="@+id/tv_schedule_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:gravity="center_vertical"
-        android:textSize="16sp"
+        android:textSize="12sp"
+        android:textColor="@color/turquoise"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/next_arrow"
-        app:layout_constraintStart_toEndOf="@id/schedule_image"
+        app:layout_constraintStart_toStartOf="@+id/tv_schedule_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_schedule_name"
         tools:text="Trains full body twice a week with 4 working days." />
 
     <ImageView
         android:id="@+id/next_arrow"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_margin="16dp"
-        android:src="@drawable/baseline_arrow_forward_ios_24"
+        android:src="@drawable/baseline_keyboard_arrow_right_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="0dp"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        app:dividerColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_schedule_description"
         app:layout_constraintStart_toStartOf="@id/tv_schedule_description"/>

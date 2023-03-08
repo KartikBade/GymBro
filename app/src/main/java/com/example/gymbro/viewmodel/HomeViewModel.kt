@@ -10,8 +10,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gymbro.activity.HomeActivity
+import com.example.gymbro.adapter.ExercisesAdapter
 import com.example.gymbro.adapter.MySchedulesAdapter
 import com.example.gymbro.databinding.FragmentHomeBinding
+import com.example.gymbro.databinding.FragmentScheduleBinding
+import com.example.gymbro.model.Exercise
 import com.example.gymbro.model.Schedule
 import com.example.gymbro.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -34,10 +37,26 @@ class HomeViewModel(
     fun getFirstName(): String = userRepository.getFirstName()
 
     fun addSchedule(schedule: Schedule) {
-        userRepository.addSchedule(schedule)
+        viewModelScope.launch {
+            userRepository.addSchedule(schedule)
+        }
     }
 
-    fun bindAdapterToDatabase(adapter: MySchedulesAdapter, binding: FragmentHomeBinding) {
-        userRepository.bindAdapterToDatabase(adapter, binding)
+    fun bindScheduleAdapterToDatabase(adapter: MySchedulesAdapter, binding: FragmentHomeBinding) {
+        viewModelScope.launch {
+            userRepository.bindScheduleAdapterToDatabase(adapter, binding)
+        }
+    }
+
+    fun bindExerciseAdapterToDatabase(adapter: ExercisesAdapter, binding: FragmentScheduleBinding, scheduleName: String) {
+        viewModelScope.launch {
+            userRepository.bindExerciseAdapterToDatabase(adapter, binding, scheduleName)
+        }
+    }
+
+    fun addExercise(exercise: Exercise, scheduleName: String) {
+        viewModelScope.launch {
+            userRepository.addExercise(exercise, scheduleName)
+        }
     }
 }

@@ -5,22 +5,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.gymbro.R
-import com.example.gymbro.databinding.MySchedulesListItemBinding
+import com.example.gymbro.databinding.ListItemMySchedulesBinding
 import com.example.gymbro.model.Schedule
 
 class MySchedulesAdapter(val listener: (Schedule) -> Unit): ListAdapter<Schedule, MySchedulesAdapter.MyScheduleViewHolder>(DiffCallBack) {
 
-    class MyScheduleViewHolder(val binding: MySchedulesListItemBinding): RecyclerView.ViewHolder(binding.root) {
+    class MyScheduleViewHolder(val binding: ListItemMySchedulesBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(schedule: Schedule) {
             binding.tvScheduleName.text = schedule.name
             binding.tvScheduleDescription.text = schedule.description
-            binding.scheduleImage.setImageResource(R.drawable.ic_launcher_background)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyScheduleViewHolder {
-        return MyScheduleViewHolder(MySchedulesListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return MyScheduleViewHolder(ListItemMySchedulesBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: MyScheduleViewHolder, position: Int) {

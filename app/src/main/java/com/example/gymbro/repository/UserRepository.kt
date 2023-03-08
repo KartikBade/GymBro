@@ -7,13 +7,18 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.gymbro.activity.HomeActivity
+import com.example.gymbro.adapter.ExercisesAdapter
 import com.example.gymbro.adapter.MySchedulesAdapter
 import com.example.gymbro.databinding.FragmentHomeBinding
+import com.example.gymbro.databinding.FragmentScheduleBinding
 import com.example.gymbro.fragment.REQUEST_CODE_SIGN_IN
+import com.example.gymbro.model.Exercise
 import com.example.gymbro.model.Schedule
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -79,26 +84,7 @@ class UserRepository(
             .add(currentSchedule)
     }
 
-//    suspend fun getScheduleList(): ArrayList<Schedule> {
-//        val scheduleList: ArrayList<Schedule> = ArrayList()
-//        userDatabaseRef.collection("users")
-//            .document(userAuthRef.currentUser?.email.toString())
-//            .collection("schedules")
-//            .get()
-//            .addOnSuccessListener { result ->
-//                for (document in result) {
-//                    val name = document.data["name"].toString()
-//                    val desc = document.data["description"].toString()
-//                    Log.e("UserRepo", "$name -> $desc")
-//                    scheduleList.add(Schedule(name = name, description = desc))
-//                    Log.e("UserRepo", scheduleList.size.toString())
-//                }
-//            }.await()
-//        Log.e("UserRepo", scheduleList.size.toString())
-//        return scheduleList
-//    }
-
-    fun bindAdapterToDatabase(adapter: MySchedulesAdapter, binding: FragmentHomeBinding) {
+    fun bindScheduleAdapterToDatabase(adapter: MySchedulesAdapter, binding: FragmentHomeBinding) {
         val scheduleCollectionRef = userDatabaseRef.collection("users")
             .document(userAuthRef.currentUser?.email.toString())
             .collection("schedules")
@@ -116,12 +102,77 @@ class UserRepository(
                 adapter.submitList(scheduleList)
                 if (scheduleList.size <= 0) {
                     binding.emptyRvScheduleAddButton.visibility = View.VISIBLE
-                    binding.emptyRvScheduleTextView.visibility = View.VISIBLE
                 } else {
                     binding.emptyRvScheduleAddButton.visibility = View.INVISIBLE
-                    binding.emptyRvScheduleTextView.visibility = View.INVISIBLE
                 }
             }
+        }
+    }
+
+    suspend fun bindExerciseAdapterToDatabase(adapter: ExercisesAdapter, binding: FragmentScheduleBinding, scheduleName: String) {
+        val scheduleCollectionRef = userDatabaseRef.collection("users")
+            .document(userAuthRef.currentUser?.email.toString())
+            .collection("schedules")
+
+        var docId: String? = null
+        scheduleCollectionRef.get()
+            .addOnSuccessListener {
+                for (document in it) {
+                    if (document.data["name"].toString() == scheduleName) {
+                        docId = document.id
+                        return@addOnSuccessListener
+                    }
+                }
+            }.await()
+
+        docId?.let {
+            scheduleCollectionRef.document(it)
+                .collection("exercises")
+                .addSnapshotListener { value, error ->
+                    error?.let {
+                        Toast.makeText(context, error.message.toString(), Toast.LENGTH_LONG).show()
+                        return@addSnapshotListener
+                    }
+                    value?.let { result ->
+                        val exerciseList = arrayListOf<Exercise>()
+                        for (document in result) {
+                            exerciseList.add(Exercise(document.data["name"].toString(), document.data["instructions"].toString()))
+                        }
+                        adapter.submitList(exerciseList)
+//                        if (scheduleList.size <= 0) {
+//                            binding.emptyRvScheduleAddButton.visibility = View.VISIBLE
+//                        } else {
+//                            binding.emptyRvScheduleAddButton.visibility = View.INVISIBLE
+//                        }
+                    }
+                }
+        }
+    }
+
+    suspend fun addExercise(exercise: Exercise, scheduleName: String) {
+        val currentExercise: MutableMap<String, Any> = hashMapOf(
+            "name" to exercise.name,
+            "instructions" to exercise.instructions
+        )
+
+        val scheduleCollectionRef = userDatabaseRef.collection("users")
+            .document(userAuthRef.currentUser?.email.toString())
+            .collection("schedules")
+
+        var docId: String? = null
+        scheduleCollectionRef.get()
+            .addOnSuccessListener {
+                for (document in it) {
+                    if (document.data["name"].toString() == scheduleName) {
+                        docId = document.id
+                    }
+                }
+            }.await()
+
+        docId?.let {
+            scheduleCollectionRef.document(it)
+                .collection("exercises")
+                .add(currentExercise)
         }
     }
 

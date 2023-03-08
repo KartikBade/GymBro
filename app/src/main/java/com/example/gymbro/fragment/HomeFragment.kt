@@ -1,12 +1,13 @@
 package com.example.gymbro.fragment
 
 import android.os.Bundle
-import android.util.Log
+import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -40,6 +41,7 @@ class HomeFragment : Fragment() {
         mDatabaseRef = Firebase.firestore
         homeViewModel = (activity as HomeActivity).homeViewModel
         materialScheduleAlertDialog = MaterialAlertDialogBuilder(binding.root.context)
+        (activity as AppCompatActivity?)?.supportActionBar?.hide()
         return binding.root
     }
 
@@ -79,7 +81,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_scheduleFragment)
         }
         binding.rvSchedule.adapter = mySchedulesAdapter
-        homeViewModel.bindAdapterToDatabase(mySchedulesAdapter, binding)
+        homeViewModel.bindScheduleAdapterToDatabase(mySchedulesAdapter, binding)
 
         val firstName = homeViewModel.getFirstName()
         binding.tvGreetingName.text = getString(R.string.greeting_name, firstName)
@@ -88,11 +90,11 @@ class HomeFragment : Fragment() {
             binding.emptyRvFriendsTextView.visibility = View.VISIBLE
         }
         binding.btnAddSchedule.setOnClickListener {
-            customAlertDialogView = LayoutInflater.from(context).inflate(R.layout.add_schedule_alert_dialog, binding.root, false)
+            customAlertDialogView = LayoutInflater.from(context).inflate(R.layout.alert_dialog_add_schedule, binding.root, false)
             launchCustomAlertDialog()
         }
         binding.emptyRvScheduleAddButton.setOnClickListener {
-            customAlertDialogView = LayoutInflater.from(context).inflate(R.layout.add_schedule_alert_dialog, binding.root, false)
+            customAlertDialogView = LayoutInflater.from(context).inflate(R.layout.alert_dialog_add_schedule, binding.root, false)
             launchCustomAlertDialog()
         }
     }
