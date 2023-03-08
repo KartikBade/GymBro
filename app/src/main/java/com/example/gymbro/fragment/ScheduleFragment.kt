@@ -2,16 +2,17 @@ package com.example.gymbro.fragment
 
 import android.os.Bundle
 import android.view.*
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.gymbro.R
 import com.example.gymbro.activity.HomeActivity
 import com.example.gymbro.adapter.ExercisesAdapter
 import com.example.gymbro.databinding.FragmentScheduleBinding
 import com.example.gymbro.model.Exercise
-import com.example.gymbro.model.Schedule
 import com.example.gymbro.viewmodel.HomeViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -46,16 +47,14 @@ class ScheduleFragment : Fragment() {
         homeViewModel.currentSchedule?.name?.let {
             homeViewModel.bindExerciseAdapterToDatabase(exerciseAdapter, binding, it)
         }
-
         binding.fabAddExercise.setOnClickListener {
             customAlertDialogView = LayoutInflater.from(context).inflate(R.layout.alert_dialog_add_exercise, binding.root, false)
             launchCustomAlertDialog()
         }
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val item: MenuItem = menu.findItem(R.id.logout)
-        item.isVisible = false
+        binding.btnBack.setOnClickListener {
+            findNavController().navigate(R.id.action_scheduleFragment_to_homeFragment)
+        }
+        binding.tvScheduleName.text = homeViewModel.currentSchedule?.name.toString()
     }
 
     private fun launchCustomAlertDialog() {

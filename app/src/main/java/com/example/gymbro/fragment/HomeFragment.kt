@@ -1,10 +1,14 @@
 package com.example.gymbro.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Layout
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +16,7 @@ import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.gymbro.R
+import com.example.gymbro.activity.AuthActivity
 import com.example.gymbro.activity.HomeActivity
 import com.example.gymbro.adapter.MySchedulesAdapter
 import com.example.gymbro.databinding.FragmentHomeBinding
@@ -48,6 +53,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
+        binding.btnMenu.setOnClickListener {
+            showMenu(it)
+        }
     }
 
     private fun launchCustomAlertDialog() {
@@ -97,5 +105,23 @@ class HomeFragment : Fragment() {
             customAlertDialogView = LayoutInflater.from(context).inflate(R.layout.alert_dialog_add_schedule, binding.root, false)
             launchCustomAlertDialog()
         }
+    }
+
+    private fun showMenu(v: View?) {
+        val popup = PopupMenu(requireContext(), v)
+        popup.inflate(R.menu.menu_home_activity)
+        popup.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.logout -> {
+                    homeViewModel.signOut()
+                    val intent = Intent(requireContext(), AuthActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                    true
+                }
+                else -> true
+            }
+        }
+        popup.show()
     }
 }

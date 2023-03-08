@@ -18,5 +18,9 @@
         android:id="@+id/scheduleFragment"
         android:name="com.example.gymbro.fragment.ScheduleFragment"
         android:label="Schedule"
-        tools:layout="@layout/fragment_schedule" />
+        tools:layout="@layout/fragment_schedule" >
+        <action
+            android:id="@+id/action_scheduleFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

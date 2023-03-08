@@ -139,11 +139,11 @@ class UserRepository(
                             exerciseList.add(Exercise(document.data["name"].toString(), document.data["instructions"].toString()))
                         }
                         adapter.submitList(exerciseList)
-//                        if (scheduleList.size <= 0) {
-//                            binding.emptyRvScheduleAddButton.visibility = View.VISIBLE
-//                        } else {
-//                            binding.emptyRvScheduleAddButton.visibility = View.INVISIBLE
-//                        }
+                        if (exerciseList.size <= 0) {
+                            binding.tvEmptyExercisesRv.visibility = View.VISIBLE
+                        } else {
+                            binding.tvEmptyExercisesRv.visibility = View.INVISIBLE
+                        }
                     }
                 }
         }
