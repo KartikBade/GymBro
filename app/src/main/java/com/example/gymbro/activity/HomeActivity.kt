@@ -44,17 +44,4 @@ class HomeActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.logout -> {
-                homeViewModel.signOut()
-                val intent = Intent(this, AuthActivity::class.java)
-                startActivity(intent)
-                finish()
-                return true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 }

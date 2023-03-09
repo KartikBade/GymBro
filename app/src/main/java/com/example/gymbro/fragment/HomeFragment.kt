@@ -20,6 +20,7 @@ import com.example.gymbro.activity.AuthActivity
 import com.example.gymbro.activity.HomeActivity
 import com.example.gymbro.adapter.MySchedulesAdapter
 import com.example.gymbro.databinding.FragmentHomeBinding
+import com.example.gymbro.databinding.NavHeaderHomeBinding
 import com.example.gymbro.model.Schedule
 import com.example.gymbro.viewmodel.HomeViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -53,9 +54,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
-        binding.btnMenu.setOnClickListener {
-            showMenu(it)
-        }
     }
 
     private fun launchCustomAlertDialog() {
@@ -105,23 +103,23 @@ class HomeFragment : Fragment() {
             customAlertDialogView = LayoutInflater.from(context).inflate(R.layout.alert_dialog_add_schedule, binding.root, false)
             launchCustomAlertDialog()
         }
-    }
-
-    private fun showMenu(v: View?) {
-        val popup = PopupMenu(requireContext(), v)
-        popup.inflate(R.menu.menu_home_activity)
-        popup.setOnMenuItemClickListener {
+        val navHeader = LayoutInflater.from(context).inflate(R.layout.nav_header_home, binding.root, false)
+        navHeader.findViewById<TextView>(R.id.nd_tv_username).text = homeViewModel.getFullName()
+        binding.nvHome.addHeaderView(navHeader)
+        binding.nvHome.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.logout -> {
                     homeViewModel.signOut()
                     val intent = Intent(requireContext(), AuthActivity::class.java)
                     startActivity(intent)
-                    requireActivity().finish()
+                    activity?.finish()
                     true
                 }
                 else -> true
             }
         }
-        popup.show()
+        binding.btnMenu.setOnClickListener {
+            binding.dlParent.openDrawer(binding.nvHome)
+        }
     }
 }

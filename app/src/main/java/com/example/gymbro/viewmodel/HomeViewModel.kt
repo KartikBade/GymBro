@@ -36,6 +36,8 @@ class HomeViewModel(
 
     fun getFirstName(): String = userRepository.getFirstName()
 
+    fun getFullName(): String = userRepository.getFullName()
+
     fun addSchedule(schedule: Schedule) {
         viewModelScope.launch {
             userRepository.addSchedule(schedule)

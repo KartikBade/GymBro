@@ -72,6 +72,10 @@ class UserRepository(
         return fullName?.get(0) ?: "User"
     }
 
+    fun getFullName(): String {
+        return userAuthRef.currentUser?.displayName ?: "User"
+    }
+
     fun addSchedule(schedule: Schedule) {
         val email = userAuthRef.currentUser?.email.toString()
         val currentSchedule: MutableMap<String, Any> = hashMapOf(
