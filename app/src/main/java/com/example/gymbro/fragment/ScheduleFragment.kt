@@ -42,7 +42,10 @@ class ScheduleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity?)?.supportActionBar?.hide()
-        val exerciseAdapter = ExercisesAdapter()
+        val exerciseAdapter = ExercisesAdapter {
+            homeViewModel.currentExercise = it
+            findNavController().navigate(R.id.action_scheduleFragment_to_exerciseFragment)
+        }
         binding.rvExercise.adapter = exerciseAdapter
         homeViewModel.currentSchedule?.name?.let {
             homeViewModel.bindExerciseAdapterToDatabase(exerciseAdapter, binding, it)

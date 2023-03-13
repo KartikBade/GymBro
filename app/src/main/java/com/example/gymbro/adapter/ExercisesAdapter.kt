@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gymbro.databinding.ListItemExercisesBinding
 import com.example.gymbro.model.Exercise
+import com.example.gymbro.model.Schedule
 
-class ExercisesAdapter: ListAdapter<Exercise, ExercisesAdapter.ExercisesAdapterViewHolder>(DiffCallBack) {
+class ExercisesAdapter(val listener: (Exercise) -> Unit): ListAdapter<Exercise, ExercisesAdapter.ExercisesAdapterViewHolder>(DiffCallBack) {
 
-    class ExercisesAdapterViewHolder(private val binding: ListItemExercisesBinding): RecyclerView.ViewHolder(binding.root) {
+    class ExercisesAdapterViewHolder(val binding: ListItemExercisesBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(exercise: Exercise) {
             binding.tvExerciseName.text = exercise.name
             binding.tvExerciseInstructions.text = exercise.instructions
@@ -23,6 +24,9 @@ class ExercisesAdapter: ListAdapter<Exercise, ExercisesAdapter.ExercisesAdapterV
 
     override fun onBindViewHolder(holder: ExercisesAdapterViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.binding.cvExercise.setOnClickListener {
+            listener(getItem(position))
+        }
     }
 
     companion object DiffCallBack: DiffUtil.ItemCallback<Exercise>() {

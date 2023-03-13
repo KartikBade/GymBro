@@ -29,6 +29,7 @@ class HomeViewModel(
 ): ViewModel() {
 
     var currentSchedule: Schedule? = null
+    var currentExercise: Exercise? = null
 
     fun signOut() {
         userRepository.signOut()

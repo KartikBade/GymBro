@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.ExerciseFragment"
+    android:background="@color/black">
+
+    <ImageView
+        android:id="@+id/btn_back_to_schedule"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/white_baseline_arrow_back_24"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_exercise_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_exercise_title" />
+
+    <TextView
+        android:id="@+id/tv_exercise_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/btn_back_to_schedule"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Deadlift" />
+
+
+    <ImageView
+        android:id="@+id/iv_decrease_reps"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/turquoise_baseline_keyboard_arrow_left_24"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_rep_count"
+        app:layout_constraintEnd_toStartOf="@id/tv_rep_count"
+        app:layout_constraintTop_toTopOf="@+id/tv_rep_count" />
+
+    <TextView
+        android:id="@+id/tv_rep_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_exercise_title" />
+
+    <ImageView
+        android:id="@+id/iv_increase_reps"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/turquoise_baseline_keyboard_arrow_right_24"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_rep_count"
+        app:layout_constraintStart_toEndOf="@id/tv_rep_count"
+        app:layout_constraintTop_toTopOf="@+id/tv_rep_count" />
+
+    <TextView
+        android:id="@+id/tv_reps_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reps"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_rep_count"
+        app:layout_constraintStart_toStartOf="@+id/tv_rep_count"
+        app:layout_constraintTop_toBottomOf="@+id/tv_rep_count" />
+
+    <TextView
+        android:id="@+id/btn_set_complete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/view_border_background"
+        android:text="Set Complete"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_reps_title" />
+
+    <TextView
+        android:id="@+id/tv_history_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
+        android:text="History"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_set_complete" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
