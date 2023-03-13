@@ -31,6 +31,14 @@ class HomeViewModel(
     var currentSchedule: Schedule? = null
     var currentExercise: Exercise? = null
 
+    val repCount: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>(0)
+    }
+
+    val weightCount: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>(0)
+    }
+
     fun signOut() {
         userRepository.signOut()
     }
@@ -60,6 +68,18 @@ class HomeViewModel(
     fun addExercise(exercise: Exercise, scheduleName: String) {
         viewModelScope.launch {
             userRepository.addExercise(exercise, scheduleName)
+        }
+    }
+
+    fun addLog() {
+        viewModelScope.launch {
+            currentSchedule?.name?.let { schedule ->
+                    currentExercise?.name?.let { exercise ->
+                        if (repCount.value != null && weightCount.value != null) {
+                            userRepository.addLog(schedule, exercise, repCount.value!!, weightCount.value!!)
+                        }
+                }
+            }
         }
     }
 }

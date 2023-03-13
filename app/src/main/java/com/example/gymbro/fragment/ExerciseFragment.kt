@@ -28,10 +28,41 @@ class ExerciseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupUi()
+    }
+
+    private fun setupUi() {
         (activity as AppCompatActivity?)?.supportActionBar?.hide()
         binding.tvExerciseTitle.text = homeViewModel.currentExercise?.name.toString()
         binding.btnBackToSchedule.setOnClickListener {
             findNavController().navigate(R.id.action_exerciseFragment_to_scheduleFragment)
+        }
+
+        homeViewModel.repCount.observe(requireActivity()) {
+            binding.tvRepCount.text = it.toString()
+        }
+        homeViewModel.weightCount.observe(requireActivity()) {
+            binding.tvWeightCount.text = it.toString()
+        }
+
+        binding.ivDecreaseReps.setOnClickListener {
+            if (homeViewModel.repCount.value!! > 0) {
+                homeViewModel.repCount.value = homeViewModel.repCount.value?.dec()
+            }
+        }
+        binding.ivIncreaseReps.setOnClickListener {
+            homeViewModel.repCount.value = homeViewModel.repCount.value?.inc()
+        }
+        binding.ivDecreaseWeight.setOnClickListener {
+            if (homeViewModel.weightCount.value!! > 0) {
+                homeViewModel.weightCount.value = homeViewModel.weightCount.value?.dec()
+            }
+        }
+        binding.ivIncreaseWeight.setOnClickListener {
+            homeViewModel.weightCount.value = homeViewModel.weightCount.value?.inc()
+        }
+        binding.btnSetComplete.setOnClickListener {
+            homeViewModel.addLog()
         }
     }
 }

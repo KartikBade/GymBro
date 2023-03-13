@@ -3,7 +3,6 @@ package com.example.gymbro.repository
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.gymbro.activity.HomeActivity
@@ -13,20 +12,19 @@ import com.example.gymbro.databinding.FragmentHomeBinding
 import com.example.gymbro.databinding.FragmentScheduleBinding
 import com.example.gymbro.fragment.REQUEST_CODE_SIGN_IN
 import com.example.gymbro.model.Exercise
+import com.example.gymbro.model.History
 import com.example.gymbro.model.Schedule
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.*
 
 class UserRepository(
     private val context: Context,
@@ -76,7 +74,7 @@ class UserRepository(
         return userAuthRef.currentUser?.displayName ?: "User"
     }
 
-    fun addSchedule(schedule: Schedule) {
+    suspend fun addSchedule(schedule: Schedule) {
         val email = userAuthRef.currentUser?.email.toString()
         val currentSchedule: MutableMap<String, Any> = hashMapOf(
             "name" to schedule.name,
@@ -85,7 +83,7 @@ class UserRepository(
         userDatabaseRef.collection("users")
             .document(email)
             .collection("schedules")
-            .add(currentSchedule)
+            .add(currentSchedule).await()
     }
 
     fun bindScheduleAdapterToDatabase(adapter: MySchedulesAdapter, binding: FragmentHomeBinding) {
@@ -163,20 +161,70 @@ class UserRepository(
             .document(userAuthRef.currentUser?.email.toString())
             .collection("schedules")
 
-        var docId: String? = null
+        var scheduleDocId: String? = null
         scheduleCollectionRef.get()
             .addOnSuccessListener {
                 for (document in it) {
                     if (document.data["name"].toString() == scheduleName) {
-                        docId = document.id
+                        scheduleDocId = document.id
                     }
                 }
             }.await()
 
-        docId?.let {
+        scheduleDocId?.let {
             scheduleCollectionRef.document(it)
                 .collection("exercises")
-                .add(currentExercise)
+                .add(currentExercise).await()
+        }
+    }
+
+    suspend fun addLog(scheduleName: String, exerciseName: String, reps: Int, weight: Int) {
+        val currentDate: String = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
+        val currentTime: String = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+
+        val currentLog: MutableMap<String, Any> = hashMapOf(
+            "date" to currentDate,
+            "time" to currentTime,
+            "reps" to reps,
+            "weight" to weight
+        )
+
+        val scheduleCollectionRef = userDatabaseRef.collection("users")
+            .document(userAuthRef.currentUser?.email.toString())
+            .collection("schedules")
+
+        var scheduleDocId: String? = null
+        scheduleCollectionRef.get()
+            .addOnSuccessListener {
+                for (document in it) {
+                    if (document.data["name"].toString() == scheduleName) {
+                        scheduleDocId = document.id
+                    }
+                }
+            }.await()
+
+        var exerciseDocId: String? = null
+        scheduleDocId?.let { it ->
+            scheduleCollectionRef.document(it)
+                .collection("exercises").get()
+                .addOnSuccessListener {
+                    for (document in it) {
+                        if (document.data["name"].toString() == exerciseName) {
+                            exerciseDocId = document.id
+                        }
+                    }
+                }.await()
+        }
+
+        exerciseDocId?.let { exerciseId ->
+            scheduleDocId?.let { scheduleId ->
+                scheduleCollectionRef.document(scheduleId)
+                    .collection("exercises")
+                    .document(exerciseId)
+                    .collection("history")
+                    .document(currentDate + currentTime)
+                    .set(currentLog).await()
+            }
         }
     }
 
