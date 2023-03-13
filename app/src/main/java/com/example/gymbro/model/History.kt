@@ -1,6 +1,5 @@
 package com.example.gymbro.model
 
-import java.util.Date
 
 data class History(
     val date: String,

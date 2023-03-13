@@ -11,7 +11,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gymbro.activity.HomeActivity
 import com.example.gymbro.adapter.ExercisesAdapter
+import com.example.gymbro.adapter.HistoryAdapter
 import com.example.gymbro.adapter.MySchedulesAdapter
+import com.example.gymbro.databinding.FragmentExerciseBinding
 import com.example.gymbro.databinding.FragmentHomeBinding
 import com.example.gymbro.databinding.FragmentScheduleBinding
 import com.example.gymbro.model.Exercise
@@ -79,6 +81,14 @@ class HomeViewModel(
                             userRepository.addLog(schedule, exercise, repCount.value!!, weightCount.value!!)
                         }
                 }
+            }
+        }
+    }
+
+    fun bindHistoryAdapterToDatabase(adapter: HistoryAdapter, binding: FragmentExerciseBinding) {
+        currentSchedule?.name?.let { schedule ->
+            currentExercise?.name?.let { exercise ->
+                userRepository.bindHistoryAdapterToDatabase(adapter, binding, schedule, exercise)
             }
         }
     }

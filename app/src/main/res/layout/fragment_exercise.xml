@@ -1,150 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.ExerciseFragment"
-    android:background="@color/black">
+    android:background="@color/black"
+    tools:context=".fragment.ExerciseFragment">
 
-    <ImageView
-        android:id="@+id/btn_back_to_schedule"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/white_baseline_arrow_back_24"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_exercise_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_exercise_title" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_exercise_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:textColor="@color/white"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/btn_back_to_schedule"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Deadlift" />
+        <ImageView
+            android:id="@+id/btn_back_to_schedule"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/white_baseline_arrow_back_24"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_exercise_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_exercise_title" />
+
+        <TextView
+            android:id="@+id/tv_exercise_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/btn_back_to_schedule"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Deadlift" />
 
 
-    <ImageView
-        android:id="@+id/iv_decrease_reps"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="70dp"
-        android:src="@drawable/turquoise_baseline_keyboard_arrow_left_24"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_rep_count"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_rep_count" />
+        <ImageView
+            android:id="@+id/iv_decrease_reps"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="70dp"
+            android:src="@drawable/turquoise_baseline_keyboard_arrow_left_24"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_rep_count"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_rep_count" />
 
-    <TextView
-        android:id="@+id/tv_rep_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:layout_marginTop="50dp"
-        android:textColor="@color/white"
-        android:textSize="40dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_exercise_title" />
+        <TextView
+            android:id="@+id/tv_rep_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="0"
+            android:textColor="@color/white"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_exercise_title" />
 
-    <ImageView
-        android:id="@+id/iv_increase_reps"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="70dp"
-        android:src="@drawable/turquoise_baseline_keyboard_arrow_right_24"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_rep_count"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_rep_count" />
+        <ImageView
+            android:id="@+id/iv_increase_reps"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="70dp"
+            android:src="@drawable/turquoise_baseline_keyboard_arrow_right_24"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_rep_count"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_rep_count" />
 
-    <TextView
-        android:id="@+id/tv_reps_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reps"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_rep_count"
-        app:layout_constraintStart_toStartOf="@+id/tv_rep_count"
-        app:layout_constraintTop_toBottomOf="@+id/tv_rep_count" />
+        <TextView
+            android:id="@+id/tv_reps_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Reps"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_rep_count"
+            app:layout_constraintStart_toStartOf="@+id/tv_rep_count"
+            app:layout_constraintTop_toBottomOf="@+id/tv_rep_count" />
 
-    <ImageView
-        android:id="@+id/iv_decrease_weight"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="70dp"
-        android:src="@drawable/turquoise_baseline_keyboard_arrow_left_24"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_weight_count"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_weight_count" />
+        <ImageView
+            android:id="@+id/iv_decrease_weight"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="70dp"
+            android:src="@drawable/turquoise_baseline_keyboard_arrow_left_24"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_weight_count"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_weight_count" />
 
-    <TextView
-        android:id="@+id/tv_weight_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:layout_marginTop="50dp"
-        android:textColor="@color/white"
-        android:textSize="40dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_reps_title" />
+        <TextView
+            android:id="@+id/tv_weight_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="0"
+            android:textColor="@color/white"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_reps_title" />
 
-    <ImageView
-        android:id="@+id/iv_increase_weight"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="70dp"
-        android:src="@drawable/turquoise_baseline_keyboard_arrow_right_24"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_weight_count"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_weight_count" />
+        <ImageView
+            android:id="@+id/iv_increase_weight"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="70dp"
+            android:src="@drawable/turquoise_baseline_keyboard_arrow_right_24"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_weight_count"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_weight_count" />
 
-    <TextView
-        android:id="@+id/tv_weight_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Weight"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_weight_count"
-        app:layout_constraintStart_toStartOf="@+id/tv_weight_count"
-        app:layout_constraintTop_toBottomOf="@+id/tv_weight_count" />
+        <TextView
+            android:id="@+id/tv_weight_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Weight"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_weight_count"
+            app:layout_constraintStart_toStartOf="@+id/tv_weight_count"
+            app:layout_constraintTop_toBottomOf="@+id/tv_weight_count" />
 
-    <TextView
-        android:id="@+id/btn_set_complete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/view_border_background"
-        android:text="Set Complete"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:layout_marginTop="50dp"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_weight_title" />
+        <TextView
+            android:id="@+id/btn_set_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/view_border_background"
+            android:padding="16dp"
+            android:text="Set Complete"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_weight_title" />
 
-    <TextView
-        android:id="@+id/tv_history_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="50dp"
-        android:text="History"
-        android:textColor="@color/white"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_set_complete" />
+        <TextView
+            android:id="@+id/tv_history_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="50dp"
+            android:text="History"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_set_complete" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_history_title"
+            android:text="Today's Logs" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:dividerColor="@color/white"
+            app:layout_constraintTop_toTopOf="@id/tv_date"
+            app:layout_constraintBottom_toBottomOf="@id/tv_date"
+            app:layout_constraintStart_toEndOf="@id/tv_date"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_logs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            tools:itemCount="3"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/list_item_history_logs"
+            app:layout_constraintEnd_toEndOf="@+id/divider1"
+            app:layout_constraintStart_toStartOf="@+id/tv_date"
+            app:layout_constraintTop_toBottomOf="@id/divider1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

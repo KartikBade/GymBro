@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import com.example.gymbro.R
 import com.example.gymbro.activity.HomeActivity
+import com.example.gymbro.adapter.HistoryAdapter
 import com.example.gymbro.databinding.FragmentExerciseBinding
 import com.example.gymbro.viewmodel.HomeViewModel
 
@@ -64,5 +65,8 @@ class ExerciseFragment : Fragment() {
         binding.btnSetComplete.setOnClickListener {
             homeViewModel.addLog()
         }
+        val historyAdapter = HistoryAdapter()
+        binding.rvLogs.adapter = historyAdapter
+        homeViewModel.bindHistoryAdapterToDatabase(historyAdapter, binding)
     }
 }

@@ -7,7 +7,9 @@ import android.view.View
 import android.widget.Toast
 import com.example.gymbro.activity.HomeActivity
 import com.example.gymbro.adapter.ExercisesAdapter
+import com.example.gymbro.adapter.HistoryAdapter
 import com.example.gymbro.adapter.MySchedulesAdapter
+import com.example.gymbro.databinding.FragmentExerciseBinding
 import com.example.gymbro.databinding.FragmentHomeBinding
 import com.example.gymbro.databinding.FragmentScheduleBinding
 import com.example.gymbro.fragment.REQUEST_CODE_SIGN_IN
@@ -25,6 +27,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.log
 
 class UserRepository(
     private val context: Context,
@@ -80,75 +83,62 @@ class UserRepository(
             "name" to schedule.name,
             "description" to schedule.description
         )
+
         userDatabaseRef.collection("users")
             .document(email)
             .collection("schedules")
-            .add(currentSchedule).await()
+            .document(schedule.name)
+            .set(currentSchedule).await()
     }
 
     fun bindScheduleAdapterToDatabase(adapter: MySchedulesAdapter, binding: FragmentHomeBinding) {
-        val scheduleCollectionRef = userDatabaseRef.collection("users")
+        userDatabaseRef.collection("users")
             .document(userAuthRef.currentUser?.email.toString())
             .collection("schedules")
-
-        scheduleCollectionRef.addSnapshotListener { value, error ->
-            error?.let {
-                Toast.makeText(context, error.message.toString(), Toast.LENGTH_LONG).show()
-                return@addSnapshotListener
-            }
-            value?.let {
-                val scheduleList = arrayListOf<Schedule>()
-                for (document in it) {
-                    scheduleList.add(Schedule(document.data["name"].toString(), document.data["description"].toString()))
+            .addSnapshotListener { value, error ->
+                error?.let {
+                    Toast.makeText(context, error.message.toString(), Toast.LENGTH_LONG).show()
+                    return@addSnapshotListener
                 }
-                adapter.submitList(scheduleList)
-                if (scheduleList.size <= 0) {
-                    binding.emptyRvScheduleAddButton.visibility = View.VISIBLE
-                } else {
-                    binding.emptyRvScheduleAddButton.visibility = View.INVISIBLE
+                value?.let {
+                    val scheduleList = arrayListOf<Schedule>()
+                    for (document in it) {
+                        scheduleList.add(Schedule(document.data["name"].toString(), document.data["description"].toString()))
+                    }
+                    adapter.submitList(scheduleList)
+                    if (scheduleList.size <= 0) {
+                        binding.emptyRvScheduleAddButton.visibility = View.VISIBLE
+                    } else {
+                        binding.emptyRvScheduleAddButton.visibility = View.INVISIBLE
+                    }
                 }
             }
-        }
     }
 
-    suspend fun bindExerciseAdapterToDatabase(adapter: ExercisesAdapter, binding: FragmentScheduleBinding, scheduleName: String) {
-        val scheduleCollectionRef = userDatabaseRef.collection("users")
+    fun bindExerciseAdapterToDatabase(adapter: ExercisesAdapter, binding: FragmentScheduleBinding, scheduleName: String) {
+        userDatabaseRef.collection("users")
             .document(userAuthRef.currentUser?.email.toString())
             .collection("schedules")
-
-        var docId: String? = null
-        scheduleCollectionRef.get()
-            .addOnSuccessListener {
-                for (document in it) {
-                    if (document.data["name"].toString() == scheduleName) {
-                        docId = document.id
-                        return@addOnSuccessListener
+            .document(scheduleName)
+            .collection("exercises")
+            .addSnapshotListener { value, error ->
+                error?.let {
+                    Toast.makeText(context, error.message.toString(), Toast.LENGTH_LONG).show()
+                    return@addSnapshotListener
+                }
+                value?.let { result ->
+                    val exerciseList = arrayListOf<Exercise>()
+                    for (document in result) {
+                        exerciseList.add(Exercise(document.data["name"].toString(), document.data["instructions"].toString()))
+                    }
+                    adapter.submitList(exerciseList)
+                    if (exerciseList.size <= 0) {
+                        binding.tvEmptyExercisesRv.visibility = View.VISIBLE
+                    } else {
+                        binding.tvEmptyExercisesRv.visibility = View.INVISIBLE
                     }
                 }
-            }.await()
-
-        docId?.let {
-            scheduleCollectionRef.document(it)
-                .collection("exercises")
-                .addSnapshotListener { value, error ->
-                    error?.let {
-                        Toast.makeText(context, error.message.toString(), Toast.LENGTH_LONG).show()
-                        return@addSnapshotListener
-                    }
-                    value?.let { result ->
-                        val exerciseList = arrayListOf<Exercise>()
-                        for (document in result) {
-                            exerciseList.add(Exercise(document.data["name"].toString(), document.data["instructions"].toString()))
-                        }
-                        adapter.submitList(exerciseList)
-                        if (exerciseList.size <= 0) {
-                            binding.tvEmptyExercisesRv.visibility = View.VISIBLE
-                        } else {
-                            binding.tvEmptyExercisesRv.visibility = View.INVISIBLE
-                        }
-                    }
-                }
-        }
+            }
     }
 
     suspend fun addExercise(exercise: Exercise, scheduleName: String) {
@@ -157,75 +147,75 @@ class UserRepository(
             "instructions" to exercise.instructions
         )
 
-        val scheduleCollectionRef = userDatabaseRef.collection("users")
+        userDatabaseRef.collection("users")
             .document(userAuthRef.currentUser?.email.toString())
             .collection("schedules")
-
-        var scheduleDocId: String? = null
-        scheduleCollectionRef.get()
-            .addOnSuccessListener {
-                for (document in it) {
-                    if (document.data["name"].toString() == scheduleName) {
-                        scheduleDocId = document.id
-                    }
-                }
-            }.await()
-
-        scheduleDocId?.let {
-            scheduleCollectionRef.document(it)
-                .collection("exercises")
-                .add(currentExercise).await()
-        }
+            .document(scheduleName)
+            .collection("exercises")
+            .document(exercise.name)
+            .set(currentExercise).await()
     }
 
     suspend fun addLog(scheduleName: String, exerciseName: String, reps: Int, weight: Int) {
         val currentDate: String = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
         val currentTime: String = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
-
         val currentLog: MutableMap<String, Any> = hashMapOf(
+            "id" to currentDate+currentTime,
             "date" to currentDate,
             "time" to currentTime,
             "reps" to reps,
             "weight" to weight
         )
 
-        val scheduleCollectionRef = userDatabaseRef.collection("users")
+        userDatabaseRef.collection("users")
             .document(userAuthRef.currentUser?.email.toString())
             .collection("schedules")
+            .document(scheduleName)
+            .collection("exercises")
+            .document(exerciseName)
+            .collection(currentDate)
+            .add(currentLog).await()
+    }
 
-        var scheduleDocId: String? = null
-        scheduleCollectionRef.get()
-            .addOnSuccessListener {
-                for (document in it) {
-                    if (document.data["name"].toString() == scheduleName) {
-                        scheduleDocId = document.id
-                    }
+    fun bindHistoryAdapterToDatabase(
+        adapter: HistoryAdapter,
+        binding: FragmentExerciseBinding,
+        scheduleName: String,
+        exerciseName: String,
+    ) {
+        val date: String = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
+        userDatabaseRef.collection("users")
+            .document(userAuthRef.currentUser?.email.toString())
+            .collection("schedules")
+            .document(scheduleName)
+            .collection("exercises")
+            .document(exerciseName)
+            .collection(date)
+            .addSnapshotListener { value, error ->
+                error?.let {
+                    Toast.makeText(context, error.message.toString(), Toast.LENGTH_LONG).show()
+                    return@addSnapshotListener
                 }
-            }.await()
-
-        var exerciseDocId: String? = null
-        scheduleDocId?.let { it ->
-            scheduleCollectionRef.document(it)
-                .collection("exercises").get()
-                .addOnSuccessListener {
-                    for (document in it) {
-                        if (document.data["name"].toString() == exerciseName) {
-                            exerciseDocId = document.id
-                        }
+                value?.let { result ->
+                    val logList = arrayListOf<History>()
+                    for (document in result) {
+                        logList.add(
+                            History(
+                                document.data["date"].toString(),
+                                document.data["time"].toString(),
+                                document.data["reps"].toString().toInt(),
+                                document.data["weight"].toString().toInt()
+                            )
+                        )
                     }
-                }.await()
-        }
-
-        exerciseDocId?.let { exerciseId ->
-            scheduleDocId?.let { scheduleId ->
-                scheduleCollectionRef.document(scheduleId)
-                    .collection("exercises")
-                    .document(exerciseId)
-                    .collection("history")
-                    .document(currentDate + currentTime)
-                    .set(currentLog).await()
+                    adapter.submitList(logList)
+//                    if (exerciseList.size <= 0) {
+//                        binding.tvEmptyExercisesRv.visibility = View.VISIBLE
+//                    } else {
+//                        binding.tvEmptyExercisesRv.visibility = View.INVISIBLE
+//                    }
+                }
             }
-        }
     }
 
     private fun saveUserToDatabase(username: String, email: String) {
