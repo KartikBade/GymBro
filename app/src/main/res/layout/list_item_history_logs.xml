@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="16dp"
-        android:text="Time:"
+        android:layout_marginStart="20dp"
+        android:text="Time"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,18 +25,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="10:15:35"
-        android:textSize="16sp"
-        android:layout_marginStart="8dp"
         android:textColor="@color/white"
-        app:layout_constraintTop_toTopOf="@id/tv_label_time"
-        app:layout_constraintStart_toEndOf="@id/tv_label_time"/>
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_label_time"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_time"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_time" />
 
     <TextView
         android:id="@+id/tv_label_reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reps:"
-        android:textColor="@color/white"
+        android:text="Reps"
+        android:textColor="@color/turquoise"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,19 +46,19 @@
         android:id="@+id/tv_reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:text="15"
-        android:textSize="16sp"
         android:textColor="@color/white"
-        app:layout_constraintStart_toEndOf="@id/tv_label_reps"
-        app:layout_constraintTop_toTopOf="@id/tv_label_reps" />
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_label_reps"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_reps"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_reps" />
 
     <TextView
         android:id="@+id/tv_label_weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Weight:"
-        android:textColor="@color/white"
+        android:text="Weight"
+        android:textColor="@color/turquoise"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_label_reps"
@@ -69,10 +69,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="50"
-        android:layout_marginStart="8dp"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/tv_label_weight"
-        app:layout_constraintTop_toTopOf="@id/tv_label_weight" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_label_weight"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_weight"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_weight" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

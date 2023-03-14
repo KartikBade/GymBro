@@ -3,6 +3,7 @@ package com.example.gymbro.repository
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.gymbro.activity.HomeActivity
@@ -207,6 +208,12 @@ class UserRepository(
                                 document.data["weight"].toString().toInt()
                             )
                         )
+                    }
+                    logList.sortBy {
+                        val timeAsInt = it.time.subSequence(0, 2).toString() +
+                                it.time.subSequence(3, 5).toString() +
+                                it.time.subSequence(6, 8).toString()
+                        timeAsInt
                     }
                     adapter.submitList(logList)
 //                    if (exerciseList.size <= 0) {
